@@ -1,0 +1,8 @@
+<Context>
+    <Resource name="jdbc/good"
+              auth="Container"
+              type="javax.sql.DataSource"
+              driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://host/database"
+    />
+</Context>
