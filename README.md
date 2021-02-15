@@ -71,7 +71,7 @@ The significance of the failure is that:
   the JNDI lookup" as a signal that the deployer has succeeded in configuring 
   the context.
 
-- the deployer gets *no notice at all* (other than an uncaught NPE when
+- the deployer gets *no notice at all* (other than an `SQLException` when
   attempting to use the webapp) that a resource on which the  webapp depends
   has not been bound to a configuration element.
   
@@ -80,7 +80,7 @@ the configuration they 'got wrong'.  Did the JDBC driver itself
 not get loaded in the right classloader context?  Was a required
 attribute of the <Resource/> element omitted?  Is the JDBC URL
 correct?  Or they just blame the developer, who wrote sloppy code
-that caused an NPE.
+that ultimately caused an NPE.
 
 In short, a myriad of mis-directed effort and blame arise because 
 it is falsely presumed that the <Context/> configuration was at 
