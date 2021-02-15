@@ -1,13 +1,12 @@
 ## Testing Goals
 As a user of the Servlet Specification, we expect the container
-to throw a `javax.naming.NameNotFoundException` if the required
-resource (`jdbc/bad`) has not been properly configured.  That is
-what we are testing for.
+to throw a `javax.naming.NameNotFoundException` if a required
+resource has not been properly configured.
 
 In this test, the servlet mounted at `/index.html` reports:
 
-- *PASS* if getting jdbc/bad throws a NamingException is thrown as we expect.
-- *FAIL* if getting jdbc/bad instead gets a BasicDataSource with no url or driverClassName property set.
+- *PASS* if getting `jdbc/bad` throws a `NamingException` is thrown as we expect
+- *FAIL* if getting `jdbc/bad` gets a `BasicDataSource` with no `url` or `driverClassName` property set
 
 As a control measure, we correctly configure `jdbc/good`
 and check that it is working.  So we will get:
@@ -15,10 +14,11 @@ and check that it is working.  So we will get:
 - *UNKNOWN* if `jdbc/good` is not also well-obtained and 'ready for action'
 
 
+# Tomcat only
 This test is specific to Tomcat DBCP2 and will not work on
 other containers.
 
-Tomcat 9 fails this test.
+Because it is Tomcat which fails this test.
 
 
 ## Basic Arrangement of the Test
@@ -53,7 +53,7 @@ The significance of the failure is that:
   attempting to use the webapp) that a resource on which the  webapp depends
   has not been bound to a configuration element.
   
-Lacking these signals, the deploye is left guessing what part of
+Lacking these signals, the hapless deployer is left guessing what part of
 the configuration they 'got wrong'.  Did the JDBC driver itself 
 not get loaded in the right classloader context?  Was a required
 attribute of the <Resource/> element omitted?  Is the JDBC URL
