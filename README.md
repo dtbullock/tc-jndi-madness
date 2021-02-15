@@ -34,9 +34,8 @@ In this test, the servlet mounted at `/index.html` reports:
 As a control measure, we correctly configure `jdbc/good`.  So we will get:
 
 - *UNKNOWN* if `jdbc/good` is not also well-obtained and 'ready for action'
-  ... this would indicate that some our assumptions for the test are not in 
-  fact valid.
-
+  ... this would indicate that our assumptions for the test are not valid.
+  
 
 ### Tomcat only
 This test is specific to Tomcat DBCP2 and will not work on
