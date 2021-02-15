@@ -3,6 +3,29 @@ As a user of the Servlet Specification, we expect the container
 to throw a `javax.naming.NameNotFoundException` if a required
 resource has not been properly configured.
 
+### Basic Arrangement of the Test
+This webapp declares two resource references of type
+`java.sql.DataSource` in `web.xml`:
+
+- `jdbc/good`
+- `jdbc/bad`
+
+It also supplies a configuration of ONE of these resources
+(`jdbc/good`) in `META-INF/context.xml` which Tomcat will use
+to configure it.  Since we need to give this resource
+declaration a chance at succeeding, we use the PostgreSQL
+driver and a syntactically-valid corresponding JDBC URL. The
+PostgreSQL driver does not attempt to use the URL until we call
+`getConnection()` and since we never do that, there is no need
+to configure an actual database for this test.
+
+We deliberately DO NOT supply a configuration for `jdbc/bad`.  
+This simulates the condition when no configuration for the
+resource is found by Tomcat's resolution mechanism.
+
+
+### Interpreting Results
+
 In this test, the servlet mounted at `/index.html` reports:
 
 - *PASS* if getting `jdbc/bad` throws a `NamingException` as we expect it should
@@ -28,26 +51,17 @@ Check out the project and invoke the `appRun` gradle task
 provided by the `gretty` plugin.  Browse to the URL to see
 the results of the test.
 
+Or if you prefer, just build the WAR file using the `war`
+task, and deploy it to a container/test-environment as 
+you see fit.
 
-### Basic Arrangement of the Test
-This webapp declares two resource references of type 
-`java.sql.DataSource` in `web.xml`:
+I did not pre-choose a test-runner environment for you,
+but feel free to adapt if necessary.
 
-- `jdbc/good`
-- `jdbc/bad`
+Once the appserver has started, invoke the servlet context:
 
-It also supplies a configuration of ONE of these resources 
-(`jdbc/good`) in `META-INF/context.xml` which Tomcat will use 
-to configure it.  Since we need to give this resource 
-declaration a chance at succeeding, we use the PostgreSQL
-driver and a syntactically-valid corresponding JDBC URL. The
-PostgreSQL driver does not attempt to use the URL until we call
-`getConnection()` and since we never do that, there is no need
-to configure an actual database for this test.
+ [http://localhost:18099/JndiMadness](http://localhost:18099/JndiMadness)
 
-We deliberately DO NOT supply a configuration for `jdbc/bad`.  
-This simulates the condition when no configuration for the
-resource is found by Tomcat's resolution mechanism.
 
 ### Why this bug matters
 
@@ -88,4 +102,5 @@ Really, the deployer is due a message like:
     ... that I found, anyway.  You need to configure 
     [list of missing resources].
 
-and in Tomcat, they don't get one.
+and in Tomcat, they don't get one.  I can't believe this situation
+exists after all these years.
